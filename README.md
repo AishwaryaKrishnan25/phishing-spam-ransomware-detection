@@ -1,84 +1,128 @@
-📌 Overview
+# ML Security Suite — Phishing, Spam & Ransomware Detection System
 
-ML Security Suite is a unified cybersecurity detection platform that identifies multiple cyber threats using machine learning models and rule-based heuristics.
-It provides real-time threat classification for:
+## Overview
 
-Phishing URLs
+ML Security Suite is a unified cybersecurity detection platform that identifies and classifies:
 
-Email Spam
+- Phishing URLs
+- Email Spam
+- SMS Spam
+- Early Ransomware Behavior
 
-SMS Spam
+Built using Python + Flask, it combines Machine Learning models and rule-based heuristics to deliver real-time cyber-threat analysis.
 
-Ransomware (Early Detection)
+---
 
-Built using Python + Flask, the system is modular, scalable, and suitable for academic, research, and enterprise learning purposes.
+## Key Features
 
-✨ Key Features
-🔐 User Authentication
+### User Authentication
 
-Secure Login/Registration
+- Secure login / registration
+- Password hashing
+- Full detection history for authenticated users
+- Guest users can view limited logs
 
-Password hashing
+---
 
-Full detection history for authenticated users
+## Threat Detection Modules
 
-🧠 Threat Detection Modules
-1️⃣ Phishing URL Detection
+### 1. Phishing URL Detection
 
-Uses:
+**Uses:**
 
-URL lexical analysis
+- URL lexical analysis
+- WHOIS domain age lookup
+- Suspicious TLD detection
+- HTTPS / SSL validation
+- Brand impersonation checks
+- XGBoost ML model
 
-WHOIS domain age lookup
+---
 
-Suspicious TLD detection
+### 2. Email Spam Detection
 
-HTTPS + URL structure validation
+**Hybrid ML + Rule Engine:**
 
-Brand impersonation checks
+- SPF / DKIM / DMARC validation
+- Spam keyword detection
+- Phishing link extraction
+- Multinomial Naïve Bayes + heuristic scoring
 
-XGBoost machine learning model
+---
 
-2️⃣ Email Spam Detection
+### 3. SMS Spam Detection
 
-Hybrid system: ML + Rule Engine
+- TF-IDF vectorization
+- Text normalization
+- Multinomial Naïve Bayes classifier
 
-SPF, DKIM, DMARC verification
+---
 
-Spam keywords & phishing link detection
+### 4. Ransomware Early Detection
 
-Naïve Bayes + heuristic scoring
+**Behavior-based features:**
 
-3️⃣ SMS Spam Detection
+- File modification rate
+- Encrypted extension ratio
+- Process spawn rate
+- Suspicious API calls
+- Random Forest ML model
+- Optional live system scan mode
 
-TF-IDF vectorization
+---
 
-Text preprocessing
+## Dashboard & Reports
 
-Multinomial Naïve Bayes classifier
+- Threat history stored in SQLite
+- Filter by Email / SMS / URL / Ransomware
+- Guests see last 10 results
+- Authenticated users see full analytics
 
-4️⃣ Ransomware Early Detection
+---
 
-Based on system behavior:
+## Tech Stack
 
-File modification rate
+- Frontend: HTML, CSS, Bootstrap
+- Backend: Flask (Python)
+- ML Models: XGBoost, RandomForest, Naïve Bayes
+- Database: SQLite3
+- Libraries: Pandas, NumPy, Scikit-learn, joblib
 
-Encryption extension ratio
+---
 
-Process spawn rate
+## Installation & Setup
 
-Suspicious API usage
+### 1. Clone the Repository
 
-Random Forest ML model
+ ```bash
+git clone
+```
 
-Optional live system scan mode
+### 2. Create a Virtual Environment
 
-📊 Dashboard & Reports
+```bash
+python -m venv venv
+venv\Scripts\activate   # Windows
+```
 
-Detection history stored in SQLite
+### 3. Install Dependencies
+ ```bash
+pip install -r requirements.txt
+```
 
-Filter by detection type (Email/SMS/URL/Ransomware)
+### 4. Run the Application
+```bash
+python app.py
+```
+App runs at: http://localhost:5000
 
-Guests see last 10 detections
 
-Logged-in users see complete analytics
+### Machine Learning Models Used
+
+- Phishing URL → XGBoost
+
+- SMS Spam → Multinomial Naïve Bayes
+
+- Email Spam → Naïve Bayes + Rules
+
+- Ransomware → Random Forest
