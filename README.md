@@ -1,110 +1,84 @@
-🧩 Overview
+📌 Overview
 
-ML Security Suite is an integrated cybersecurity detection platform that identifies multiple threat types using machine learning and rule-based analysis.
-It provides real-time classification of:
+ML Security Suite is a unified cybersecurity detection platform that identifies multiple cyber threats using machine learning models and rule-based heuristics.
+It provides real-time threat classification for:
 
-✔️ Phishing URLs
-✔️ Email Spam
-✔️ SMS Spam
-✔️ Ransomware (Early Detection)
+Phishing URLs
 
-The system is designed with modularity, accuracy, and extensibility in mind — ideal for cybersecurity learning, research, and academic projects.
+Email Spam
 
-✨ Features
+SMS Spam
+
+Ransomware (Early Detection)
+
+Built using Python + Flask, the system is modular, scalable, and suitable for academic, research, and enterprise learning purposes.
+
+✨ Key Features
 🔐 User Authentication
 
-Secure login & registration
+Secure Login/Registration
 
-Hashed password storage
+Password hashing
 
-Logged-in users get full detection history
+Full detection history for authenticated users
 
-🧠 Machine Learning–Powered Detection
+🧠 Threat Detection Modules
 1️⃣ Phishing URL Detection
 
-XGBoost ML model
+Uses:
 
-Domain age lookup
+URL lexical analysis
+
+WHOIS domain age lookup
 
 Suspicious TLD detection
 
+HTTPS + URL structure validation
+
 Brand impersonation checks
 
-HTTPS & URL structure validation
+XGBoost machine learning model
 
 2️⃣ Email Spam Detection
 
-Hybrid: ML + rule engine
+Hybrid system: ML + Rule Engine
 
-SPF, DKIM, DMARC header checks
+SPF, DKIM, DMARC verification
 
-Phishing link detection
+Spam keywords & phishing link detection
 
-Spam keyword scanning
+Naïve Bayes + heuristic scoring
 
 3️⃣ SMS Spam Detection
 
-Naïve Bayes classifier
+TF-IDF vectorization
 
-TF-IDF feature vectorization
+Text preprocessing
 
-Text normalization & preprocessing
+Multinomial Naïve Bayes classifier
 
-4️⃣ Ransomware Detection
+4️⃣ Ransomware Early Detection
 
-Random Forest classifier
+Based on system behavior:
 
-Behavioral features:
+File modification rate
 
-file modification rate
+Encryption extension ratio
 
-encryption extension ratio
+Process spawn rate
 
-process spawn count
+Suspicious API usage
 
-suspicious API usage
+Random Forest ML model
 
-Live system scanning option
+Optional live system scan mode
 
-📊 Dashboard & Analytics
+📊 Dashboard & Reports
 
-Detection history table
+Detection history stored in SQLite
 
-Filter by threat category
+Filter by detection type (Email/SMS/URL/Ransomware)
 
-Shows last 10 detections for anonymous users
+Guests see last 10 detections
 
-Full access for logged-in users
-
-🏗️ Tech Stack
-Layer	Tools
-Frontend	HTML, CSS, Bootstrap
-Backend	Flask (Python)
-ML Models	XGBoost, RandomForest, Multinomial Naïve Bayes
-Database	SQLite3
-Other Libraries	Pandas, NumPy, joblib, re, whois
-
-⚙️ Installation & Setup
-1️⃣ Clone the repository
-git clone https://github.com/yourusername/yourrepo.git
-cd yourrepo
-
-2️⃣ Create & Activate Virtual Environment
-python -m venv venv
-venv\Scripts\activate       # Windows
-
-3️⃣ Install Dependencies
-pip install -r requirements.txt
-
-4️⃣ Run Application
-python app.py
-
-
-👉 App starts at: http://localhost:5000
-
-📊 Machine Learning Models Used
-Threat Type	Algorithm	Reason
-Phishing URL	XGBoost	Best for structured + lexical features
-Email Spam	Naïve Bayes + Rules	High precision + context rules
-SMS Spam	Multinomial Naïve Bayes	Fast & effective for short texts
-Ransomware	Random Forest	Works well with behavior-based features
+Logged-in users see complete analytics
