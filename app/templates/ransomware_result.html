@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ransomware Detection Result</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f1f3f6; }
+        .container {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 { color: #2e3b4e; }
+        .result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .danger { color: #a94442; background-color: #f8d7da; border: 1px solid #f5c6cb; }
+        .safe { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .scan-path {
+            margin-top: 20px;
+            font-size: 15px;
+            color: #333;
+            background: #f0f0f0;
+            padding: 10px;
+            border-left: 4px solid #999;
+            border-radius: 5px;
+        }
+        table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th { background-color: #eaeaea; }
+        .back-btn {
+            margin-top: 25px;
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #777;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-btn:hover { background-color: #5a5a5a; }
+
+        /* Loading spinner */
+        .loading {
+            text-align: center;
+            font-size: 18px;
+            color: #444;
+            padding: 20px;
+        }
+        .loader {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const loadingDiv = document.getElementById('loading');
+            const resultDiv = document.getElementById('result-content');
+
+            // Initially hide result, show loader
+            resultDiv.style.display = 'none';
+            loadingDiv.style.display = 'block';
+
+            // Show result after 3 seconds
+            setTimeout(() => {
+                loadingDiv.style.display = 'none';
+                resultDiv.style.display = 'block';
+            }, 3000);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>🧠 Ransomware Analysis Result</h2>
+
+        <!-- Loader -->
+        <div id="loading" class="loading">
+            <div class="loader"></div>
+            <div>Analyzing file for ransomware... Please wait</div>
+        </div>
+
+        <!-- Actual Result (initially hidden) -->
+        <div id="result-content">
+            <div class="result {% if 'Detected' in result %}danger{% else %}safe{% endif %}">
+                {{ result }}
+            </div>
+
+            {% if scanned_path %}
+            <div class="scan-path">
+                🔍 <strong>Scanned Path:</strong> {{ scanned_path }}
+            </div>
+            {% endif %}
+
+            {% if features %}
+            <h3>Uploaded Feature Values:</h3>
+            <table>
+                <tr><th>Feature</th><th>Value</th></tr>
+                <tr><td>File Modification Rate</td><td>{{ features.file_mod_rate }}</td></tr>
+                <tr><td>Encryption Extension Ratio</td><td>{{ features.encrypt_ext_ratio }}</td></tr>
+                <tr><td>Processes Spawned</td><td>{{ features.proc_spawned }}</td></tr>
+                <tr><td>Suspicious API Usage</td><td>{{ features.suspicious_api }}</td></tr>
+            </table>
+            {% endif %}
+
+            <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="/ransomware" class="btn btn-primary btn-custom">⬅ Upload Another File</a>
+            <a href="/" class="btn btn-secondary btn-custom">🏠 Home</a>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

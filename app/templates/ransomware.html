@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5 py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4 animate__animated animate__fadeIn">
+                <div class="card-body p-4">
+                    <!-- Heading -->
+                    <h2 class="text-center text-primary mb-4">
+                        <i class="bi bi-shield-lock-fill"></i> Ransomware Detection
+                    </h2>
+
+                    <!-- Upload JSON File Form -->
+                    <form action="/ransomware/result" method="POST" enctype="multipart/form-data" class="mb-4">
+                        <div class="mb-3">
+                            <label for="feature_file" class="form-label fw-semibold">
+                                <i class="bi bi-upload"></i> Upload Feature JSON File
+                            </label>
+                            <input type="file" name="feature_file" id="feature_file" accept=".json" class="form-control" required>
+                        </div>
+
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="save_request" name="save_request">
+                            <label class="form-check-label" for="save_request">
+                                <i class="bi bi-database-fill"></i> Save result to database
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-play-fill"></i> Detect from Uploaded File
+                        </button>
+                    </form>
+
+                    <hr>
+
+                    <!-- System Check Form -->
+                    <form action="/ransomware/system-check" method="POST">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="save_request" name="save_request">
+                            <label class="form-check-label" for="save_request">
+                                <i class="bi bi-database-fill"></i> Save result to database
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="bi bi-cpu-fill"></i> Auto Generate & Detect
+                        </button>
+                    </form>
+
+                    <!-- Back to Home -->
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('home.home') }}" class="back-link">⬅ Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Animate.css for smooth fadeIn -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+{% endblock %}

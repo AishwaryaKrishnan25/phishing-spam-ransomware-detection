@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #f0f4ff, #ffffff);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .email-container {
+        max-width: 960px;
+        margin: 3rem auto;
+        background: #ffffff;
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h1 {
+        color: #0d6efd;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.2);
+    }
+
+    .section-divider {
+        margin: 2.5rem 0;
+        border-top: 2px dashed #dee2e6;
+    }
+
+    .btn-analyze {
+        width: 100%;
+        background: linear-gradient(to right, #0d6efd, #0a58ca);
+        color: #fff;
+        font-size: 1.125rem;
+        padding: 0.875rem;
+        border-radius: 12px;
+        border: none;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    .btn-analyze:hover {
+        background: linear-gradient(to right, #0a58ca, #084298);
+        transform: translateY(-2px);
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0;
+    }
+
+    .form-check-input {
+        width: 2.5em;
+        height: 1.5em;
+        margin-right: 0.75rem;
+    }
+
+    .form-check-label {
+        font-weight: 500;
+        color: #444;
+    }
+
+    .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .bi {
+        margin-right: 0.5rem;
+        font-size: 1.2rem;
+        vertical-align: middle;
+    }
+
+    .required-field::after {
+        content: " *";
+        color: #dc3545;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .email-container {
+            padding: 2rem;
+            margin: 1.5rem auto;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-divider {
+            margin: 2rem 0;
+        }
+    }
+</style>
+
+<div class="email-container">
+    <h1><i class="bi bi-shield-lock-fill"></i> Email Spam Detection</h1>
+
+    <form method="POST">
+        <!-- Sender Info Section -->
+        <div class="form-section">
+            <div class="mb-4">
+                <label for="from" class="required-field">
+                    <i class="bi bi-envelope-at-fill"></i> Sender Email
+                </label>
+                <input type="email" name="from" class="form-control" placeholder="e.g., user@example.com" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="subject" class="required-field">
+                    <i class="bi bi-chat-left-dots-fill"></i> Subject
+                </label>
+                <input type="text" name="subject" class="form-control" placeholder="Enter email subject" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="body" class="required-field">
+                    <i class="bi bi-body-text"></i> Email Body
+                </label>
+                <textarea name="body" rows="5" class="form-control" placeholder="Paste the email content here..." required></textarea>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Header Authentication Section -->
+        <div class="form-section">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="spf" class="required-field">
+                        <i class="bi bi-key-fill"></i> SPF Status
+                    </label>
+                    <select name="spf" class="form-select" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="pass">Pass</option>
+                        <option value="fail">Fail</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="dkim" class="required-field">
+                        <i class="bi bi-lock-fill"></i> DKIM Status
+                    </label>
+                    <select name="dkim" class="form-select" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="pass">Pass</option>
+                        <option value="fail">Fail</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="dmarc" class="required-field">
+                        <i class="bi bi-shield-fill-check"></i> DMARC Status
+                    </label>
+                    <select name="dmarc" class="form-select" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="pass">Pass</option>
+                        <option value="fail">Fail</option>
+                        <option value="none">None</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4 mt-3">
+                <label for="x_origin">
+                    <i class="bi bi-server"></i> X-Originating IP (Optional)
+                </label>
+                <input type="text" name="x_origin" class="form-control" placeholder="e.g., 192.168.0.1">
+            </div>
+
+            <div class="mb-4">
+                <label for="attachments">
+                    <i class="bi bi-paperclip"></i> Attachments (comma-separated)
+                </label>
+                <input type="text" name="attachments" class="form-control" placeholder="e.g., invoice.pdf, malware.exe">
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Save to History Section -->
+        <div class="form-check form-switch mb-4">
+            <input class="form-check-input" type="checkbox" id="save_request" name="save_request">
+            <label class="form-check-label" for="save_request">
+                <i class="bi bi-hdd-fill"></i> Save detection result to database
+            </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-analyze">
+            <i class="bi bi-search-heart"></i> Analyze Email
+        </button>
+    </form>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('home.home') }}" class="back-link">⬅ Back to Home</a>
+    </div>
+</div>
+{% endblock %}

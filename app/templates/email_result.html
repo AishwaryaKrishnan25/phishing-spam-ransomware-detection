@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #edf2fb, #f8f9fa);
+        font-family: 'Segoe UI', sans-serif;
+        min-height: 100vh;
+    }
+
+    .email-result-container {
+        width: 100%;
+        max-width: 1000px;
+        background: #ffffff;
+        padding: 2.5rem 2rem;
+        border-radius: 1.5rem;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+        margin: 2rem auto;
+        animation: fadeInUp 0.6s ease;
+    }
+
+    h2 {
+        font-weight: 700;
+        color: #0d6efd;
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .section {
+        margin-bottom: 2.2rem;
+    }
+
+    .section h4 {
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.2rem;
+        color: #212529;
+        font-weight: 600;
+    }
+
+    .label {
+        display: inline-block;
+        padding: 0.5rem 1.2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 999px;
+    }
+
+    .SPAM { background-color: #f8d7da; color: #b02a37; }
+    .HAM { background-color: #d1e7dd; color: #146c43; }
+    .SUSPICIOUS { background-color: #fff3cd; color: #856404; }
+
+    ul {
+        margin-top: 0.5rem;
+        padding-left: 1.5rem;
+    }
+
+    .btn-custom {
+        padding: 0.75rem 1.7rem;
+        font-size: 1.05rem;
+        border-radius: 10px;
+        margin: 0.75rem;
+    }
+
+    .info-pair p { margin-bottom: 0.4rem; }
+    .text-muted { font-style: italic; }
+    .text-section p { margin-bottom: 0.3rem; }
+
+    /* Animation */
+    @keyframes fadeInUp {
+        0% { opacity: 0; transform: translateY(30px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Loading Spinner */
+    .loading {
+        text-align: center;
+        font-size: 18px;
+        color: #444;
+        padding: 50px;
+    }
+
+    .loader {
+        border: 6px solid #f3f3f3;
+        border-top: 6px solid #0d6efd;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        .email-result-container {
+            padding: 2rem 1.5rem;
+        }
+    }
+</style>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const loader = document.getElementById('loading');
+        const result = document.getElementById('result');
+
+        result.style.display = 'none';
+        loader.style.display = 'block';
+
+        setTimeout(() => {
+            loader.style.display = 'none';
+            result.style.display = 'block';
+        }, 3000);
+    });
+</script>
+
+<!-- Loader Section -->
+<div id="loading" class="loading">
+    <div class="loader"></div>
+    <div>Analyzing email content... Please wait</div>
+</div>
+
+<!-- Result Section -->
+<div id="result">
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="email-result-container">
+            <h2>📬 Email Spam Detection Result</h2>
+
+            <div class="section">
+                <h4>🧾 Final Verdict</h4>
+                <p><strong>Status:</strong> <span class="label {{ label }}">{{ label }}</span></p>
+                <p><strong>Spam Score:</strong> <span class="fw-semibold text-primary">{{ score }} / 10</span></p>
+            </div>
+
+            <div class="section">
+                <h4>📧 Email Information</h4>
+                <div class="info-pair text-section">
+                    <p><strong>From:</strong> {{ features.sender }}</p>
+                    <p><strong>Subject:</strong> {{ features.subject }}</p>
+                    <p><strong>Body:</strong> {{ features.body }}</p>
+                    <p><strong>Sender Domain:</strong> {{ features.sender_domain }}</p>
+                    <p><strong>X-Originating IP:</strong> {{ features.x_origin_ip }}</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h4>🔐 Email Header Authentication</h4>
+                <p><strong>SPF Status:</strong> {{ features.spf_status }}</p>
+                <p><strong>DKIM Status:</strong> {{ features.dkim_status }}</p>
+                <p><strong>DMARC Status:</strong> {{ features.dmarc_status }}</p>
+            </div>
+
+            <div class="section">
+                <h4>🚩 Detected Risk Indicators</h4>
+                <div class="text-section">
+                    <p><strong>Suspicious Domain:</strong> {{ 'Yes' if features.is_suspicious_domain else 'No' }}</p>
+                    <p><strong>Typo Domain:</strong> {{ 'Yes' if features.is_typo_domain else 'No' }}</p>
+
+                    <p><strong>Spam Keywords:</strong>
+                        {% if features.spam_keywords %}
+                            <ul class="text-danger fw-semibold">
+                                {% for keyword in features.spam_keywords %}
+                                    <li>{{ keyword }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="text-muted">None detected</span>
+                        {% endif %}
+                    </p>
+
+                    <p><strong>Phishing URLs:</strong>
+                        {% if features.phishing_urls %}
+                            <ul class="text-warning fw-semibold">
+                                {% for url in features.phishing_urls %}
+                                    <li>{{ url }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="text-muted">None detected</span>
+                        {% endif %}
+                    </p>
+
+                    <p><strong>Malicious Attachments:</strong>
+                        {% if features.malicious_attachments %}
+                            <ul class="text-danger fw-semibold">
+                                {% for file in features.malicious_attachments %}
+                                    <li>{{ file }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <span class="text-muted">None detected</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/email" class="btn btn-primary btn-custom shadow-sm">
+                    🔄 Check Another Email
+                </a>
+                <a href="/" class="btn btn-outline-secondary btn-custom shadow-sm">
+                    🏠 Return to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

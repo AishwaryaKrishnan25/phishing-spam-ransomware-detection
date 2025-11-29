@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        background-color: #ffffff !important;
+    }
+
+    .sms-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        padding: 2rem;
+    }
+
+    .sms-card {
+        background-color: #ffffff;
+        padding: 2.5rem;
+        border-radius: 1.25rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 600px;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        color: #4b0082;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    label.form-label {
+        font-weight: 500;
+        color: #333;
+    }
+
+    textarea.form-control {
+        border-radius: 10px;
+        resize: vertical;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    textarea.form-control:focus {
+        border-color: #6610f2;
+        box-shadow: 0 0 0 0.2rem rgba(102, 16, 242, 0.25);
+    }
+
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+        accent-color: #6f42c1;
+    }
+
+    .form-check-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #555;
+    }
+
+    .checkbox-row {
+        background-color: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        padding: 12px 20px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border: none;
+        color: white;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #4a00e0, #8e2de2);
+        transform: translateY(-2px);
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 1.25rem;
+        color: #6a11cb;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+        color: #4b0082;
+    }
+</style>
+
+<div class="sms-wrapper container">
+    <div class="sms-card">
+        <h2 class="text-center">SMS Spam Detection</h2>
+        <form method="POST" action="{{ url_for('sms.sms_spam') }}">
+            <div class="mb-3">
+                <label for="message" class="form-label">Enter SMS Message:</label>
+                <textarea name="message" id="message" rows="5" required class="form-control" placeholder="Type or paste your SMS message here..."></textarea>
+            </div>
+
+            <div class="form-check form-switch mb-4">
+              <input type="checkbox" class="form-check-input" id="save_request" name="save_request">
+              <label class="form-check-label" for="save_request">Save this to database</label>
+            </div>
+
+            <button type="submit" class="btn btn-submit w-100">
+                🔍 Check Message
+            </button>
+        </form>
+
+        <div class="text-center">
+            <a href="{{ url_for('home.home') }}" class="back-link">⬅ Back to Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

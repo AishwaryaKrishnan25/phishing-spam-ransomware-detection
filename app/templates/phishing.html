@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="checker-box p-4 p-md-5">
+
+                <!-- Heading Section -->
+                <div class="text-center mb-4">
+                    <i class="bi bi-link-45deg heading-icon"></i>
+                    <h2 class="mt-3">Phishing URL Checker</h2>
+                    <p class="text-muted mb-4">Analyze any URL and detect potential phishing risks</p>
+                </div>
+
+                <!-- Error Message -->
+                {% if error %}
+                <div class="alert alert-danger text-center mb-4">{{ error }}</div>
+                {% endif %}
+
+                <!-- Form Start -->
+                <form method="POST">
+                    <!-- URL Input Field -->
+                    <div class="mb-4">
+                        <label for="url" class="form-label">Enter URL to Analyze:</label>
+                        <input type="url" class="form-control form-control-lg" name="url" required placeholder="https://example.com">
+                    </div>
+
+                    <!-- Save to Database Toggle -->
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="save_detection" name="save_detection">
+                        <label class="form-check-label" for="save_detection">Save this to database</label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg py-2">
+                            <i class="bi bi-search me-2"></i> Analyze URL
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Back to Home -->
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('home.home') }}" class="back-link">⬅ Back to Home</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Page Styles -->
+<style>
+    .checker-box {
+        background-color: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        transition: transform 0.3s ease;
+    }
+
+    .checker-box:hover {
+        transform: translateY(-5px);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #0062E6, #33AEFF);
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(to right, #004bba, #2b90df);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 98, 230, 0.3);
+    }
+
+    .heading-icon {
+        font-size: 2.5rem;
+        color: #007bff;
+        margin-bottom: 1rem;
+    }
+
+    body {
+        background: linear-gradient(to right, #f9f9f9, #cce0ff);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    input.form-control-lg {
+        padding: 1rem;
+        border-radius: 10px;
+        border: 1px solid #dee2e6;
+    }
+
+    input.form-control-lg:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+</style>
+{% endblock %}

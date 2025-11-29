@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  body {
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    background-color: white; /* Set background to white */
+  }
+
+  .main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #343a40; /* Dark gray for contrast */
+  }
+
+  .lead {
+    color: #6c757d;
+    font-size: 1.2rem;
+  }
+
+  .feature-section {
+    margin-top: 2rem;
+  }
+
+  .feature-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem; /* Decent spacing between cards */
+  }
+
+  .feature-card {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    border: 1px solid #dee2e6;
+    border-radius: 16px;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    width: 250px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .feature-btn {
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+  }
+
+  .feature-btn.email {
+    background: linear-gradient(to right, #007bff, #00c6ff);
+    color: white;
+  }
+
+  .feature-btn.sms {
+    background: linear-gradient(to right, #28a745, #a3e635);
+    color: white;
+  }
+
+  .feature-btn.phishing {
+    background: linear-gradient(to right, #ffc107, #ff6f00);
+    color: white;
+  }
+
+  .feature-btn.ransomware {
+    background: linear-gradient(to right, #6f42c1, #d63384);
+    color: white;
+  }
+
+  .feature-btn.dashboard {
+    background: linear-gradient(to right, #212529, #6c757d);
+    color: white;
+  }
+
+  .feature-btn:hover {
+    opacity: 0.9;
+  }
+</style>
+
+<div class="container text-center mt-5">
+  <h2 class="main-title">🚀 Welcome to ML Security Suite</h2>
+  <p class="lead">Choose what you'd like to detect below:</p>
+
+  <!-- ✅ Main features -->
+  <div class="feature-section">
+    <div class="feature-row">
+      <div class="feature-card">
+        <h5>Email Spam Detection</h5>
+        <a href="{{ url_for('email.check_email') }}" class="btn feature-btn email mt-2">Detect Email Spam</a>
+      </div>
+      <div class="feature-card">
+        <h5>SMS Spam Detection</h5>
+        <a href="{{ url_for('sms.sms_spam') }}" class="btn feature-btn sms mt-2">Detect SMS Spam</a>
+      </div>
+      <div class="feature-card">
+        <h5>Phishing URL Detection</h5>
+        <a href="{{ url_for('phishing.check_url') }}" class="btn feature-btn phishing mt-2">Check Phishing URL</a>
+      </div>
+      <div class="feature-card">
+        <h5>Ransomware Detection</h5>
+        <a href="{{ url_for('ransomware.ransomware_upload') }}" class="btn feature-btn ransomware mt-2">Scan for Ransomware</a>
+      </div>
+    </div>
+
+    <!-- ✅ Dashboard centered on its own row -->
+    <div class="d-flex justify-content-center mt-5">
+      <div class="feature-card">
+        <h5>Dashboard</h5>
+        <a href="{{ url_for('dashboard.dashboard') }}" class="btn feature-btn dashboard mt-2">Go to Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

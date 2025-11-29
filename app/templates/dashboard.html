@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detection Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(to right, #e3f2fd, #fce4ec);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .card {
+            border-radius: 15px;
+        }
+
+        .card-title {
+            font-weight: bold;
+        }
+
+        .card-stat {
+            transition: transform 0.3s ease;
+        }
+
+        .card-stat:hover {
+            transform: translateY(-5px);
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .table td:first-child {
+            max-width: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .table td:first-child {
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <h2 class="text-center mb-4 text-primary">
+        <i class="fas fa-chart-line me-2"></i>Detection Dashboard
+    </h2>
+
+    
+
+    <!-- Stat Cards -->
+    <div class="row text-center mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-start border-success border-4 card-stat">
+                <div class="card-body">
+                    <h5 class="card-title text-success"><i class="fas fa-sms me-2"></i>SMS Detections</h5>
+                    <h3>{{ sms_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-start border-danger border-4 card-stat">
+                <div class="card-body">
+                    <h5 class="card-title text-danger"><i class="fas fa-link me-2"></i>Phishing Detections</h5>
+                    <h3>{{ phishing_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-start border-primary border-4 card-stat">
+                <div class="card-body">
+                    <h5 class="card-title text-primary"><i class="fas fa-envelope me-2"></i>Email Detections</h5>
+                    <h3>{{ email_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card shadow-sm border-start border-warning border-4 card-stat">
+                <div class="card-body">
+                    <h5 class="card-title text-warning"><i class="fas fa-bug me-2"></i>Ransomware Alerts</h5>
+                    <h3>{{ ransomware_count }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter: Visible only if user is logged in -->
+    {% if is_logged_in %}
+    <form method="get" action="/dashboard" class="mb-4">
+        <div class="row g-2 align-items-center justify-content-center">
+            <div class="col-auto">
+                <label for="filter" class="form-label fw-bold">📂 Filter by Model:</label>
+            </div>
+            <div class="col-auto">
+                <select id="filter" name="filter" class="form-select" onchange="this.form.submit()">
+                    <option value="">All</option>
+                    <option value="Phishing" {{ 'selected' if selected_filter == 'Phishing' else '' }}>Phishing</option>
+                    <option value="Email" {{ 'selected' if selected_filter == 'Email' else '' }}>Email</option>
+                    <option value="SMS" {{ 'selected' if selected_filter == 'SMS' else '' }}>SMS</option>
+                    <option value="Ransomware" {{ 'selected' if selected_filter == 'Ransomware' else '' }}>Ransomware</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+
+    <!-- Detection Table -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3"><i class="fas fa-history me-2"></i>Recent Detections</h5>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th style="width: 35%;">🔍 Input</th>
+                            <th style="width: 20%;">📤 Prediction</th>
+                            <th style="width: 20%;">📌 Model</th>
+                            <th style="width: 25%;">⏱️ Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in recent_detections %}
+                            <tr>
+                                <td>{{ row[0] }}</td>
+                                <td class="text-center">{{ row[1] }}</td>
+                                <td class="text-center">{{ row[2] }}</td>
+                                <td class="text-center">{{ row[3] }}</td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="4" class="text-center text-muted">No records found</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- See More / Login Prompt -->
+            {% if not is_logged_in %}
+                <div class="text-center mt-3">
+                    <a href="/login" class="btn btn-outline-primary">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login for Full Access
+                    </a>
+                </div>
+            {% elif not showing_all %}
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('dashboard.dashboard', filter=selected_filter, see_all='true') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-angle-double-down me-1"></i>See All
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="text-center">
+            <a href="{{ url_for('home.home') }}" class="back-link">⬅ Back to Home</a>
+        </div>
+
+</body>
+</html>
+{% endblock %}

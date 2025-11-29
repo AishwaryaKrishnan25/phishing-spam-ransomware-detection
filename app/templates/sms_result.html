@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #ffffff;
+    }
+
+    .container {
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 20px;
+        max-width: 700px;
+        margin: 40px auto;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        animation: popUp 0.6s ease;
+    }
+
+    @keyframes popUp {
+        0% { transform: scale(0.9); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    h2 {
+        color: #6a1b9a;
+        margin-bottom: 25px;
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .message-box {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-left: 5px solid #6a1b9a;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        text-align: left;
+        font-size: 16px;
+        color: #333;
+        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+        word-break: break-word;
+    }
+
+    .result {
+        font-size: 20px;
+        margin-top: 20px;
+    }
+
+    .result span {
+        display: inline-block;
+        font-size: 20px;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+
+    .scam {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 2px solid #c62828;
+    }
+
+    .safe {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border: 2px solid #2e7d32;
+    }
+
+    .btn-custom {
+        margin: 15px 10px 0 10px;
+        text-decoration: none;
+        color: #fff;
+        background: linear-gradient(45deg, #7b1fa2, #512da8);
+        padding: 12px 20px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .btn-custom:hover {
+        background: linear-gradient(45deg, #512da8, #7b1fa2);
+        transform: scale(1.05);
+    }
+
+    /* Loader styles */
+    #loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+    }
+
+    .spinner {
+        border: 8px solid #e0e0e0;
+        border-top: 8px solid #6a1b9a;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    #result-container {
+        display: none;
+    }
+</style>
+
+<div id="loader">
+    <div class="spinner"></div>
+</div>
+
+<div class="container" id="result-container">
+    <h2>📩 SMS Spam Detection Result</h2>
+
+    <p><strong>📨 Message Entered:</strong></p>
+    <div class="message-box">{{ message }}</div>
+
+    <p class="result">
+        <strong>📋 Prediction:</strong>
+        {% if prediction == 'Scam' %}
+            <span class="scam">🚨 Spam Detected</span>
+        {% else %}
+            <span class="safe">✅ Legitimate</span>
+        {% endif %}
+    </p>
+
+    <a href="{{ url_for('sms.sms_spam') }}" class="btn btn-custom">🔄 Analyze Another Message</a>
+    <a href="{{ url_for('home.home') }}" class="btn btn-custom">🏠 Go to home</a>
+</div>
+
+<script>
+    setTimeout(function () {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("result-container").style.display = "block";
+    }, 3000); // 3 seconds
+</script>
+{% endblock %}
